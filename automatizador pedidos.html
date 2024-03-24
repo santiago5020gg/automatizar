@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="filesaver.js"></script>
+    <script src="xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5 ">
+        <pre id="json"></pre>
+        <button class="btn btn-primary" onclick="show()">Mostrar datos</button>
+    </div>
+    <div id="info" style="display: none; margin-top: 40px;">
+        <button id="addOrder" onclick="createOrder()">Agregar pedido</button>
+        <div>
+            <div>
+                <label style="font-weight: bold;">NOMBRES: </label>	
+                <label id="NOMBRES"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">APELLIDOS: </label>	
+                <label id="APELLIDOS"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">DIRECCION Y BARRIO: </label>	
+                <label id="DIRECCION"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">TELÉFONO: </label>	
+                <label id="TELÉFONO"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">ID DE PRODUCTO: </label>	
+                <label id="PRODUCTOID"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">CANTIDAD: </label>	
+                <label id="CANTIDAD"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">NOTA: </label>	
+                <label id="NOTA"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">TRANSPORTADORA: </label>	
+                <label id="TRANSPORTADORA"></label>
+            </div>
+            <div>
+                <label style="font-weight: bold;">PRECIO TOTAL: </label>	
+                <label id="TOTAL"></label>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="json-excel.js"></script>
+
+</html>

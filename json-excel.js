@@ -97,8 +97,12 @@ function downloadAsExcel() {
 
 function saveAsExcel(buffer, filename) {
     try {
+        const date = new Date();
+        const stringDate = date.toLocaleDateString();
+        let ms = date.getMilliseconds();
+        const fullDate = "-"+stringDate+"-"+ms;
         const data = new Blob([buffer], { type: EXCEL_TYPE });
-        saveAs(data, filename + EXCEL_EXTENSION);
+        saveAs(data, filename+fullDate + EXCEL_EXTENSION);
         location.reload();
     } catch (error) {
         alert("error al guardar el excel");
@@ -135,7 +139,7 @@ const startprocess = () => {
         }
         orders.push(jsonData);
         localStorage.setItem("jsonOrders", JSON.stringify(orders, null, 1));
-        downloadAsExcel();
+        location.reload();
         return;
     } catch (error) {
         alert("hubo error al procesar localstorage");

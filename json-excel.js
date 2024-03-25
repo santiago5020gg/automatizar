@@ -19,17 +19,56 @@ const EXCEL_EXTENSION = '.xlsx';
 
 
 
+function changekeys(obj) {
+
+    let newObj = {
+        "NOMBRES": obj["Nombres"],
+        "APELLIDOS": obj["Apellidos"],
+        "DIRECCIÓN Y BARRIO": obj["Dirección"],
+        "DEPARTAMENTO": obj["Departamento"],
+        "CIUDAD": obj["Ciudad"],
+        "TELÉFONO": obj["Celular"],
+        "ID DE PRODUCTO": obj["Producto"],
+        "CANTIDAD": obj["Cantidad"],
+        "PRECIO TOTAL (SIN PUNTOS NI COMAS)": obj["Total"],
+        "CON RECAUDO": "si",
+        "NOTA": obj["Observaciones"],
+        "EMAIL (OPCIONAL)": "",
+        "ID DE VARIABLE (OPCIONAL)": "",
+        "CODIGO POSTAL (OPCIONAL)": "",
+        "TRANSPORTADORA (OPCIONAL)": obj["Transpo"],
+        "CEDULA (OPCIONAL)": "",
+        "COLONIA (OBLIGATORIO SOLO PARA QUIKEN)": ""
+    }
+
+    return newObj;
+}
+
+const changeArrObj = (data) => {
+    const changedData = [];
+    data.forEach(elem => {
+        changedData.push(changekeys(elem));
+    });
+    return changedData;
+};
+
 function downloadAsExcel() {
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = {
-        Sheets: {
-            'data': worksheet
-        },
-        SheetNames: ['data']
-    };
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    console.log(excelBuffer);
-    saveAsExcel(excelBuffer, 'data_template');
+    try {
+        const data = changeArrObj(JSON.parse(localStorage.getItem("jsonOrders")));
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = {
+            Sheets: {
+                'data': worksheet
+            },
+            SheetNames: ['data']
+        };
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        console.log(excelBuffer);
+        saveAsExcel(excelBuffer, 'data_template');
+    } catch (error) {
+        alert("error al procesar el excel");
+    }
+
 }
 
 function saveAsExcel(buffer, filename) {
@@ -39,16 +78,33 @@ function saveAsExcel(buffer, filename) {
 
 const saveJson = () => {
     try {
-        localStorage.setItem("orders-json", JSON.stringify(jsonData, null, 1));
+        let orders = localStorage.getItem("jsonOrders") ? localStorage.getItem("jsonOrders") : [];
+        let orderExist = 0;
+        if (orders.length > 0) {
+            orders = JSON.parse(orders);
+            orders.forEach(order => {
+                if (order["Celular"] === jsonData["Celular"]) {
+                    orderExist += 1;
+                }
+            });
+        }
+        if (orderExist === 0) {
+            orders.push(jsonData);
+            localStorage.setItem("jsonOrders", JSON.stringify(orders, null, 1));
+            return;
+        }
+        orders = [jsonData];
+        localStorage.setItem("jsonOrders", JSON.stringify(orders, null, 1));
     } catch (error) {
-        alert("hubo error al guardar los datos en localstorage");
+        alert("hubo error al procesar localstorage");
     }
-    
+
 }
 
 
 const createOrder = () => {
     saveJson();
+    downloadAsExcel();
 }
 
 

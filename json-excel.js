@@ -1,16 +1,40 @@
 
 let jsonData = null;
 
+function isValidJson(json) {
+    const requiredKeys = ["Nombres", "Apellidos", "Dirección", "Departamento", "Ciudad", "Celular", "Observaciones", "Cantidad", "Total", "Transpo", "Producto"];
+    // Convertir el JSON a un objeto
+
+    // Recorrer las claves requeridas
+    for (const clave of requiredKeys) {
+        // Si la clave no existe en el objeto, retornar falso
+        if (!json.hasOwnProperty(clave)) {
+            return false;
+        }
+    }
+
+    // Si todas las claves existen, retornar verdadero
+    return true;
+}
+
 const getJsonFromText = (text) => {
-    const regex = /\*([^\n:]+):\s*([^*\n]+)/g;
+    const regex = /\+\+\+([^\n:]+):\s*(.*)/g;
     let match;
     const json = {};
     while ((match = regex.exec(text)) !== null) {
         const key = match[1].trim();
         const value = match[2].trim();
+        if (!value) {
+            err += 1;
+            return;
+        }
         json[key] = value;
     }
     console.log(json);
+    if (!isValidJson(json)) {
+        document.querySelector("#info").style.display = "none";
+        return null;
+    }
     return json;
 }
 
@@ -74,9 +98,20 @@ function downloadAsExcel() {
 function saveAsExcel(buffer, filename) {
     const data = new Blob([buffer], { type: EXCEL_TYPE });
     saveAs(data, filename + EXCEL_EXTENSION);
+    document.querySelector("#info").style.display="none";
 }
 
-const saveJson = () => {
+
+clearInfo = () => {
+    hideInfo();
+    setHtml(null);
+}
+
+const hideInfo = () => {
+    document.querySelector("#info").style.display="none";
+}
+
+const startprocess = () => {
     try {
         let orders = localStorage.getItem("jsonOrders") ? localStorage.getItem("jsonOrders") : [];
         let orderExist = 0;
@@ -88,13 +123,15 @@ const saveJson = () => {
                 }
             });
         }
-        if (orderExist === 0) {
-            orders.push(jsonData);
-            localStorage.setItem("jsonOrders", JSON.stringify(orders, null, 1));
+        if(orderExist > 0){
+            alert("ya hay un numero registrado y es "+jsonData["Celular"]+ "de "+jsonData["Nombres"]);
+           clearInfo();
             return;
         }
-        orders = [jsonData];
+        orders.push(jsonData);
         localStorage.setItem("jsonOrders", JSON.stringify(orders, null, 1));
+        downloadAsExcel();
+        return;
     } catch (error) {
         alert("hubo error al procesar localstorage");
     }
@@ -103,28 +140,31 @@ const saveJson = () => {
 
 
 const createOrder = () => {
-    saveJson();
-    downloadAsExcel();
+    startprocess();
 }
 
+
+const setHtml = (elem) => {
+    document.querySelector("#NOMBRES").innerHTML = elem["Nombres"];
+    document.querySelector("#APELLIDOS").innerHTML = elem["Apellidos"];
+    document.querySelector("#DIRECCION").innerHTML = elem["Dirección"];
+    document.querySelector("#TELÉFONO").innerHTML = elem["Celular"];
+    document.querySelector("#PRODUCTOID").innerHTML = elem["Producto"];
+    document.querySelector("#CANTIDAD").innerHTML = elem["Cantidad"];
+    document.querySelector("#NOTA").innerHTML = elem["Observaciones"];
+    document.querySelector("#TRANSPORTADORA").innerHTML = elem["Transpo"];
+    document.querySelector("#TOTAL").innerHTML = elem["Total"];
+    document.querySelector("#info").style.display = "block";
+}
 
 const show = async () => {
     navigator.clipboard.readText()
         .then(text => {
             jsonData = getJsonFromText(text);
-            document.querySelector("#NOMBRES").innerHTML = jsonData["Nombres"];
-            document.querySelector("#APELLIDOS").innerHTML = jsonData["Apellidos"];
-            document.querySelector("#DIRECCION").innerHTML = jsonData["Dirección"];
-            document.querySelector("#TELÉFONO").innerHTML = jsonData["Celular"];
-            document.querySelector("#PRODUCTOID").innerHTML = jsonData["Producto"];
-            document.querySelector("#CANTIDAD").innerHTML = jsonData["Cantidad"];
-            document.querySelector("#NOTA").innerHTML = jsonData["Observaciones"];
-            document.querySelector("#TRANSPORTADORA").innerHTML = jsonData["Transpo"];
-            document.querySelector("#TOTAL").innerHTML = jsonData["Total"];
-            document.querySelector("#info").style.display = "block";
+            setHtml(jsonData);
         })
         .catch(err => {
-            alert("hubo un error al mostrar los datos, revisa que no borraste nada");
+            alert("hubo un error al mostrar los datos, revisa si copiaste bien el formato");
             console.error('Failed to read clipboard contents: ', err);
         });
 }

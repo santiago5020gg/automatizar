@@ -23,11 +23,11 @@
 <body>
     <div class="container mt-5 ">
         <pre id="json"></pre>
-        <button class="btn btn-primary" onclick="show()">Mostrar datos</button>
-        <button class="btn btn-primary" onclick="getOrders()">Mostrar pedidos creados</button>
+        <button id="show order" class="btn btn-primary" onclick="show()">Crear pedido</button>
+        <button id="show order" class="btn btn-primary" onclick="deleteAll()">Borrar todo</button>
     </div>
     <div id="info" style="display: none; margin-top: 40px;">
-        <button id="addOrder" onclick="createOrder()">Agregar pedido</button>
+        <button id="addOrder" onclick="createOrder()">Confirmar</button>
         <div>
             <div>
                 <label style="font-weight: bold;">NOMBRES: </label>
@@ -71,6 +71,7 @@
     <table id="tabla-registros">
         <thead>
             <tr>
+                <th>Acciones</th>
                 <th>Nombres</th>
                 <th>Apellidos</th>
                 <th>Dirección</th>

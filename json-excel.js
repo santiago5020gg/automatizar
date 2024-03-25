@@ -96,9 +96,14 @@ function downloadAsExcel() {
 }
 
 function saveAsExcel(buffer, filename) {
-    const data = new Blob([buffer], { type: EXCEL_TYPE });
-    saveAs(data, filename + EXCEL_EXTENSION);
-    document.querySelector("#info").style.display="none";
+    try {
+        const data = new Blob([buffer], { type: EXCEL_TYPE });
+        saveAs(data, filename + EXCEL_EXTENSION);
+        location.reload();
+    } catch (error) {
+        alert("error al guardar el excel");
+    }
+
 }
 
 
@@ -108,7 +113,7 @@ clearInfo = () => {
 }
 
 const hideInfo = () => {
-    document.querySelector("#info").style.display="none";
+    document.querySelector("#info").style.display = "none";
 }
 
 const startprocess = () => {
@@ -123,9 +128,9 @@ const startprocess = () => {
                 }
             });
         }
-        if(orderExist > 0){
-            alert("ya hay un numero registrado y es "+jsonData["Celular"]+ "de "+jsonData["Nombres"]);
-           clearInfo();
+        if (orderExist > 0) {
+            alert("ya hay un numero registrado y es " + jsonData["Celular"] + "de " + jsonData["Nombres"]);
+            clearInfo();
             return;
         }
         orders.push(jsonData);
@@ -170,4 +175,13 @@ const show = async () => {
 }
 
 
+const deleteAll = () => {
+    // Mostrar mensaje de confirmación
+    if (!confirm("¿Estás seguro de eliminar todo?")) {
+        return;
+    }
+
+    localStorage.setItem("jsonOrders", []);
+    location.reload();
+}
 

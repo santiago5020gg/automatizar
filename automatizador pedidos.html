@@ -8,55 +8,86 @@
     <title>Document</title>
     <script src="filesaver.js"></script>
     <script src="xlsx.full.min.js"></script>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%; /* Optional: Set a width for the table */
+        }
+        th, td {
+          border: 1px solid black;
+          padding: 5px;
+        }
+      </style>
 </head>
 
 <body>
     <div class="container mt-5 ">
         <pre id="json"></pre>
         <button class="btn btn-primary" onclick="show()">Mostrar datos</button>
+        <button class="btn btn-primary" onclick="getOrders()">Mostrar pedidos creados</button>
     </div>
     <div id="info" style="display: none; margin-top: 40px;">
         <button id="addOrder" onclick="createOrder()">Agregar pedido</button>
         <div>
             <div>
-                <label style="font-weight: bold;">NOMBRES: </label>	
+                <label style="font-weight: bold;">NOMBRES: </label>
                 <label id="NOMBRES"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">APELLIDOS: </label>	
+                <label style="font-weight: bold;">APELLIDOS: </label>
                 <label id="APELLIDOS"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">DIRECCION Y BARRIO: </label>	
+                <label style="font-weight: bold;">DIRECCION Y BARRIO: </label>
                 <label id="DIRECCION"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">TELÉFONO: </label>	
+                <label style="font-weight: bold;">TELÉFONO: </label>
                 <label id="TELÉFONO"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">ID DE PRODUCTO: </label>	
+                <label style="font-weight: bold;">ID DE PRODUCTO: </label>
                 <label id="PRODUCTOID"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">CANTIDAD: </label>	
+                <label style="font-weight: bold;">CANTIDAD: </label>
                 <label id="CANTIDAD"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">NOTA: </label>	
+                <label style="font-weight: bold;">NOTA: </label>
                 <label id="NOTA"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">TRANSPORTADORA: </label>	
+                <label style="font-weight: bold;">TRANSPORTADORA: </label>
                 <label id="TRANSPORTADORA"></label>
             </div>
             <div>
-                <label style="font-weight: bold;">PRECIO TOTAL: </label>	
+                <label style="font-weight: bold;">PRECIO TOTAL: </label>
                 <label id="TOTAL"></label>
             </div>
         </div>
     </div>
+
+    <table id="tabla-registros">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Dirección</th>
+                <th>Departamento</th>
+                <th>Ciudad</th>
+                <th>Celular</th>
+                <th>Observaciones</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Transportadora</th>
+                <th>Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </body>
 <script src="json-excel.js"></script>
-
+<script src="orders.js"></script>
 </html>
